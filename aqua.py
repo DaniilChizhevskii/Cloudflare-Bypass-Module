@@ -1,20 +1,19 @@
 import time
+import os
 import sys
 import types
 import json
 import execjs
 import typing
 import random
-import uuid
-import subprocess
 import threading
 import tls_client
 
 from dataclasses import dataclass
-from wb_base_data import wbBaseData
-from interactive_data import CF_Parser, CF_Interactive
-from reverse_decrypter import analyze_response
-from orchestrate_full_reverse import (
+from .wb_base_data import wbBaseData
+from .interactive_data import CF_Interactive
+from .reverse_decrypter import analyze_response
+from .orchestrate_full_reverse import (
     OrchestrateJS, 
     VM_Automation,  
     ReversedObjects
@@ -215,11 +214,11 @@ class CF_MetaData:
             time.sleep(0.1)
 
         thread.join()
-        open('cloudflare-data/cf_code.txt', 'w').write(chl_code)
+        open(os.path.join(os.path.dirname(__file__), 'cloudflare-data/cf_code.txt'), 'w').write(chl_code)
         return chl_code
 
     def parse_challenge_auto(self, siteKey) -> tuple[list[str], str, list[str], str, str]:
-        cf_reversed_js = execjs.compile(open('cf_reversed_funcs.js', 'r').read())
+        cf_reversed_js = execjs.compile(open(os.path.join(os.path.dirname(__file__), 'cloudflare-data/cf_reversed_funcs.js'), 'r').read())
         l = cf_reversed_js.call('l')
         ov2_t_url = f'https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/g/turnstile/if/ov2/av0/rcv/{l}/{siteKey}/dark/fbE/new/normal/auto/'
 
@@ -295,7 +294,7 @@ class CF_TurnstileBase(CF_MetaData):
             cf_html=True,
             html_code=self.site_html
         )
-        self.utility = execjs.compile(open('_reverse_utility.js', 'r').read())
+        self.utility = execjs.compile(open(os.path.join(os.path.dirname(__file__), 'cloudflare-data/_reverse_utility.js'), 'r').read())
         self.cloudflare_js = None
 
         self.d_find_value = lambda index: self.d[index].split("'")[1]

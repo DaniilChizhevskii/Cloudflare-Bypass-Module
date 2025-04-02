@@ -1,19 +1,13 @@
 import httpx
 import typing
 import random
-import secrets
-import base64
 import execjs
-import uuid
-import time
+import os
 
-from dataclasses import dataclass
-from orchestrate_full_reverse import OrchestrateJS, ReversedObjects
-#from aqua import CF_Solver
-from wb_base_data import wbBaseData
+from .orchestrate_full_reverse import OrchestrateJS, ReversedObjects
 
 TEST_SITEKEY = '0x4AAAAAAAAjq6WYeRDKmebM'
-reversed_funcs = execjs.compile(open('cf_reversed_funcs.js', 'r').read())
+reversed_funcs = execjs.compile(open(os.path.join(os.path.dirname(__file__), 'cloudflare-data/cf_reversed_funcs.js'), 'r').read())
 
 class CF_Widget:
     renderEndTime = None

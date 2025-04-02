@@ -1,4 +1,3 @@
-from random import uniform
 from datetime import datetime
 
 def wbBaseData(domain, useragent):

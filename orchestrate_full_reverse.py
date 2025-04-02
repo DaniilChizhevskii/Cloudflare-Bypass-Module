@@ -1,10 +1,9 @@
 import sys
-import types
+import os
 import json
 import time
 import typing
 import random
-import string
 import execjs
 from javascript import require, globalThis
 
@@ -16,8 +15,8 @@ jsdom_worker = require('jsdom-worker')
 node_fetch = require('node-fetch').default
 
 PATH = 'cloudflare-data/orchestrate.json'
-reversed_funcs = execjs.compile(open('cf_reversed_funcs.js', 'r').read())
-reverse_utility = execjs.compile(open('_reverse_utility.js', 'r').read())
+reversed_funcs = execjs.compile(open(os.path.join(os.path.dirname(__file__), 'cloudflare-data/cf_reversed_funcs.js'), 'r').read())
+reverse_utility = execjs.compile(open(os.path.join(os.path.dirname(__file__), 'cloudflare-data/_reverse_utility.js'), 'r').read())
 
 
 class ReversedObjects:
@@ -91,10 +90,10 @@ class VM_Automation:
         globalThis.FileReader = self.window.window.FileReader
 
         self.window.URL = vm.Script('URL').runInThisContext()
-        self.window.stuffed_html = open('cloudflare-data/stuffed.html', 'r').read()
+        self.window.stuffed_html = open(os.path.join(os.path.dirname(__file__), 'cloudflare-data/stuffed.html'), 'r').read()
 
         # cloueflare turnstile onload
-        vm.Script(open('_window.js', 'r').read()).runInContext(self.window)
+        vm.Script(open(os.path.join(os.path.dirname(__file__), 'cloudflare-data/_window.js'), 'r').read()).runInContext(self.window)
         vm.Script('''
         window.lt = function(e) {
             return e > 0 && e < 36e4;
@@ -172,13 +171,13 @@ class VM_Automation:
         if html:
             if code is not None:
                 return code
-            with open('cloudflare-data/clearance_base.html', 'r') as f:
+            with open(os.path.join(os.path.dirname(__file__), 'cloudflare-data/clearance_base.html'), 'r') as f:
                 html_code = f.read()#.replace('CF_RAY', ray).replace('TIMESTAMP', timestamp)
             return html_code
         return ''
 
     def get_reversed_func(self, func_name='h') -> str:
-        with open('cf_reversed_funcs.js', 'r') as f:
+        with open(os.path.join(os.path.dirname(__file__), 'cloudflare-data/cf_reversed_funcs.js'), 'r') as f:
             code = f.read()
 
         if func_name == 'h':
@@ -261,7 +260,7 @@ class VM_Automation:
         window_decrypted = decrypter(result['encrypted'], cfRay)
 
         if 'challenges' in flowUrl:
-            open('cloudflare-data/decrypted.js', 'w').write(window_decrypted)
+            open(os.path.join(os.path.dirname(__file__), 'cloudflare-data/decrypted.js'), 'w').write(window_decrypted)
         #print('decrypted:', window_decrypted[:90])
         #sys.exit()
         return window_decrypted
@@ -559,7 +558,7 @@ class VM_Automation:
             }
             '''.replace('_o0', obj).replace('_p0', prop)).runInContext(self.window)
 
-        shadow_html = open('cloudflare-data/turnstile_html.html', 'r').read()
+        shadow_html = open(os.path.join(os.path.dirname(__file__), 'cloudflare-data/turnstile_html.html'), 'r').read()
         _parse_window_eval()
 
         vm.Script('''
@@ -634,7 +633,7 @@ class VM_Automation:
         _getclientrects_code = "'pr'+f);console.log('lala', g);g.getClientRects = window.simulation_getClientRects;"
 
         c = code.replace('arguments[0]', 'JSON.parse(window.decryptedChl)').replace('arguments[1]', 'window.sendRequest').replace(f'window._cf_chl_opt.{_0xL}.appendChild', 'window.document.body.appendChild').replace(f'window._cf_chl_opt.{_0xL}.removeChild', 'window.document.body.removeChild').replace('g.getClientRects()', 'true').replace('window.performance', 'window._performance')
-        open('cloudflare-data/ccc.js', 'w').write(c)
+        open(os.path.join(os.path.dirname(__file__), 'cloudflare-data/ccc.js'), 'w').write(c)
 
         vm.Script(c).runInContext(self.window)
         if flow_auto:
@@ -771,11 +770,11 @@ class OrchestrateJS:
     @staticmethod
     def set_orchestrate_data(values):
         data = {'interactive_1': values}
-        with open(PATH, 'w') as f: json.dump(data, f, indent=4)
+        with open(os.path.join(os.path.dirname(__file__), PATH), 'w') as f: json.dump(data, f, indent=4)
 
     @staticmethod
     def get_orchestrate_data(key='interactive_1') -> typing.Any:
-        with open(PATH, 'r') as f:
+        with open(os.path.join(os.path.dirname(__file__), PATH), 'r') as f:
             data = json.load(f)
         return data.get(key, None)
 
@@ -895,7 +894,7 @@ class OrchestrateJS:
         func_names = []
         funcs = []
 
-        open('cloudflare-data/laputa.js', 'w').write(self.js)
+        open(os.path.join(os.path.dirname(__file__), 'cloudflare-data/laputa.js'), 'w').write(self.js)
 
         fr = ''
 
