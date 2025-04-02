@@ -22,3 +22,6 @@ dependencies = [
 
 [project.urls]
 Homepage = "https://github.com/DaniilChizhevskii/Cloudflare-Bypass-Module"
+
+[tool.setuptools.package-data]
+"*" = ["*.*"]
