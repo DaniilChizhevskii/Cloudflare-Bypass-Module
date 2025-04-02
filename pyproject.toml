@@ -1,0 +1,16 @@
+[project]
+name = "cloudflare_bypass"
+version = "0.0.1"
+authors = [
+  { name="Daniil Chizhevskii", email="daniilchizhevskij@gmail.com" },
+]
+description = "A small package to bypass CloudFlare"
+readme = "README.md"
+requires-python = ">=3.13"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Operating System :: OS Independent",
+]
+
+[project.urls]
+Homepage = "https://github.com/DaniilChizhevskii/Cloudflare-Bypass-Module"
